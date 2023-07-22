@@ -31,10 +31,19 @@ async function run() {
     const collegeCollection = client
       .db("academiclandiaDB")
       .collection("colleges");
+    const galleryCollection = client
+      .db("academiclandiaDB")
+      .collection("galleryImages");
 
     // api start
+    //college apis
     app.get("/colleges", async (req, res) => {
       const result = await collegeCollection.find().toArray();
+      res.send(result);
+    });
+    // gallery apis
+    app.get("/galleries", async (req, res) => {
+      const result = await galleryCollection.find().toArray();
       res.send(result);
     });
     // api end
