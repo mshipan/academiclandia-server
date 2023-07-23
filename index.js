@@ -34,6 +34,9 @@ async function run() {
     const galleryCollection = client
       .db("academiclandiaDB")
       .collection("galleryImages");
+    const researchCollection = client
+      .db("academiclandiaDB")
+      .collection("researchPaper");
 
     // api start
     //college apis
@@ -44,6 +47,11 @@ async function run() {
     // gallery apis
     app.get("/galleries", async (req, res) => {
       const result = await galleryCollection.find().toArray();
+      res.send(result);
+    });
+    // research paper apis
+    app.get("/research-papers", async (req, res) => {
+      const result = await researchCollection.find().toArray();
       res.send(result);
     });
     // api end
