@@ -28,6 +28,7 @@ async function run() {
     await client.connect();
 
     //collections
+    const usersCollection = client.db("academiclandiaDB").collection("users");
     const collegeCollection = client
       .db("academiclandiaDB")
       .collection("colleges");
@@ -45,6 +46,48 @@ async function run() {
       .collection("bookings");
 
     // api start
+    // users apis
+    // find user by email
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+    // create a user
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email };
+      const alreadyAUser = await usersCollection.findOne(query);
+      if (alreadyAUser) {
+        return res.send({ message: "User Already Exist" });
+      }
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+    //update user
+    app.put("/user/:email", async (req, res) => {
+      try {
+        const email = req.params.email;
+        const filter = { email: email };
+        const updateUser = req.body;
+        const newUser = {
+          $set: {
+            phone: updateUser.phone,
+            gender: updateUser.gender,
+            dob: updateUser.dob,
+            country: updateUser.country,
+            address: updateUser.address,
+            university: updateUser.university,
+          },
+        };
+        const result = await usersCollection.updateOne(filter, newUser);
+        res.send(result);
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
+    });
+
     //college apis
     app.get("/colleges", async (req, res) => {
       const result = await collegeCollection.find().toArray();
