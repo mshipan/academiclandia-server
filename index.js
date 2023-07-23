@@ -40,6 +40,9 @@ async function run() {
     const reviewCollection = client
       .db("academiclandiaDB")
       .collection("reviews");
+    const bookingsCollection = client
+      .db("academiclandiaDB")
+      .collection("bookings");
 
     // api start
     //college apis
@@ -67,6 +70,32 @@ async function run() {
     // reviews apis
     app.get("/reviews", async (req, res) => {
       const result = await reviewCollection.find().toArray();
+      res.send(result);
+    });
+    // add a review
+    app.post("/reviews", async (req, res) => {
+      const newReviews = req.body;
+      const result = await reviewCollection.insertOne(newReviews);
+      res.send(result);
+    });
+
+    //booking apis
+    // view all bookings
+    app.get("/bookings", async (req, res) => {
+      const result = await bookingsCollection.find().toArray();
+      res.send(result);
+    });
+    //add a booking
+    app.post("/bookings", async (req, res) => {
+      const newbookings = req.body;
+      const result = await bookingsCollection.insertOne(newbookings);
+      res.send(result);
+    });
+    //view single booking college details
+    app.get("/booking/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookingsCollection.findOne(query);
       res.send(result);
     });
     // api end
