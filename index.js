@@ -37,6 +37,9 @@ async function run() {
     const researchCollection = client
       .db("academiclandiaDB")
       .collection("researchPaper");
+    const reviewCollection = client
+      .db("academiclandiaDB")
+      .collection("reviews");
 
     // api start
     //college apis
@@ -52,6 +55,11 @@ async function run() {
     // research paper apis
     app.get("/research-papers", async (req, res) => {
       const result = await researchCollection.find().toArray();
+      res.send(result);
+    });
+    // reviews apis
+    app.get("/reviews", async (req, res) => {
+      const result = await reviewCollection.find().toArray();
       res.send(result);
     });
     // api end
