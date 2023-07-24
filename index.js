@@ -100,6 +100,7 @@ async function run() {
       const result = await collegeCollection.findOne(query);
       res.send(result);
     });
+
     // gallery apis
     app.get("/galleries", async (req, res) => {
       const result = await galleryCollection.find().toArray();
@@ -139,6 +140,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await bookingsCollection.findOne(query);
+      res.send(result);
+    });
+    // single user bookings
+    app.get("/bookings/:uid", async (req, res) => {
+      const uid = req.params.uid;
+      const query = { uid: uid };
+      const result = await bookingsCollection.find(query).toArray();
       res.send(result);
     });
     // api end
